@@ -62,7 +62,12 @@ const TaskBoard: React.FC = () => {
   const deleteTask = (id: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
-  
+
+  const updateTask = (id: string, updatedTask: Task) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === id ? updatedTask : task))
+    );
+  };
 
   const getTasksByStatus = (status: Task["status"]) => tasks.filter((task) => task.status === status);
 
@@ -78,7 +83,8 @@ const TaskBoard: React.FC = () => {
                   <TaskColumn
                     title={status === "todo" ? "À faire" : status === "in-progress" ? "En cours" : "Terminé"}
                     tasks={getTasksByStatus(status as Task["status"])}
-                    deleteTask={deleteTask}allez
+                    deleteTask={deleteTask}
+                    updateTask={updateTask} // Ajoute updateTask ici
                   />
                   {provided.placeholder}
                 </div>
@@ -92,3 +98,4 @@ const TaskBoard: React.FC = () => {
 };
 
 export default TaskBoard;
+
