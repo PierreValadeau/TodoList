@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import TaskColumn from "./TaskColumn";
+import { Task } from "../styles/Task";
 
-export interface Task {
+export interface TaskType {
   id: string;
   title: string;
   description: string;
@@ -98,4 +99,3 @@ const TaskBoard: React.FC = () => {
 };
 
 export default TaskBoard;
-
