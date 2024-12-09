@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { Task } from "../styles/Task";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import TaskColumn from "./TaskColumn";
 
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: "todo" | "in-progress" | "done";
+  priority: "low" | "medium" | "high";
+}
+
 const TaskBoard: React.FC = () => {
-  const [tasks] = useState<Task[]>([
+  const [tasks, setTasks] = useState<Task[]>([
     {
       id: "1",
       title: "Apprendre TypeScript",
@@ -27,14 +35,58 @@ const TaskBoard: React.FC = () => {
     },
   ]);
 
-  const getTasksByStatus = (status: Task["status"]) =>
-    tasks.filter((task) => task.status === status);
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    if (!destination) return;
+
+    if (source.droppableId !== destination.droppableId || source.index !== destination.index) {
+      const updatedTasks = Array.from(tasks);
+      const [movedTask] = updatedTasks.splice(source.index, 1);
+      movedTask.status = destination.droppableId as Task["status"];
+      updatedTasks.splice(destination.index, 0, movedTask);
+      setTasks(updatedTasks);
+    }
+  };
+
+  const addTask = (title: string) => {
+    const newTask: Task = {
+      id: Math.random().toString(),
+      title,
+      description: "",
+      status: "todo",
+      priority: "medium",
+    };
+    setTasks([...tasks, newTask]);
+  };
+
+  const deleteTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+  
+
+  const getTasksByStatus = (status: Task["status"]) => tasks.filter((task) => task.status === status);
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-around", color: "black" }}>
-      <TaskColumn title="À faire" tasks={getTasksByStatus("todo")} />
-      <TaskColumn title="En cours" tasks={getTasksByStatus("in-progress")} />
-      <TaskColumn title="Terminé" tasks={getTasksByStatus("done")} />
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <button onClick={() => addTask("Nouvelle tâche")}>Ajouter une tâche</button>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          {["todo", "in-progress", "done"].map((status) => (
+            <Droppable key={status} droppableId={status}>
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps} style={{ margin: "10px" }}>
+                  <TaskColumn
+                    title={status === "todo" ? "À faire" : status === "in-progress" ? "En cours" : "Terminé"}
+                    tasks={getTasksByStatus(status as Task["status"])}
+                    deleteTask={deleteTask}allez
+                  />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </div>
+      </DragDropContext>
     </div>
   );
 };

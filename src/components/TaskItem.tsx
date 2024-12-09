@@ -3,6 +3,7 @@ import { Task } from "../styles/Task";
 
 interface TaskItemProps {
   task: Task;
+  deleteTask: (id: string) => void;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
@@ -21,6 +22,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       <p>
         <strong>Priorité :</strong> {task.priority}
       </p>
+      <button
+        onClick={() => {
+          console.log("Suppression de la tâche :", task.id);
+          deleteTask(task.id); // Appel de la fonction deleteTask
+        }}
+      >
+        Supprimer
+      </button>
     </div>
   );
 };
