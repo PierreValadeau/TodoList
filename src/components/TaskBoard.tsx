@@ -67,7 +67,9 @@ const TaskBoard: React.FC = () => {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif", display: "flex",}}>
-      <button onClick={() => addTask("Nouvelle tâche")}>Ajouter une tâche</button>
+      <div>
+      <button className="buttonAddTask" onClick={() => addTask("Nouvelle tâche")}>Ajouter une tâche</button>
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="column">
           <TaskColumn
