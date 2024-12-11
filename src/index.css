@@ -72,9 +72,10 @@ button:focus-visible {
 }
 
 .buttonAddTask{
-  height: 50px;
+  height: 60px;
   padding: 10px;
   width: 200px;
+
 
 }
 

@@ -12,7 +12,7 @@ interface TaskColumnProps {
 
 const TaskColumn: React.FC<TaskColumnProps> = ({
   title,
-  tasks,
+  tasks =[],
   deleteTask,
   updateTask,
 }) => {

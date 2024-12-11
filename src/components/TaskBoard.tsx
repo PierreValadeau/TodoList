@@ -31,15 +31,23 @@ const TaskBoard: React.FC = () => {
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
     if (!destination) return;
-
+  
+    // Crée une copie des tâches
     const updatedTasks = Array.from(tasks);
+    
+    // Retire la tâche déplacée
     const [movedTask] = updatedTasks.splice(source.index, 1);
-
+  
+    // Met à jour le statut de la tâche selon la colonne de destination
     movedTask.status = destination.droppableId as Task["status"];
+  
+    // Insère la tâche déplacée à sa nouvelle position
     updatedTasks.splice(destination.index, 0, movedTask);
-
+  
+    // Met à jour l'état des tâches
     setTasks(updatedTasks);
   };
+  
 
   const addTask = (title: string) => {
     const newTask: Task = {
